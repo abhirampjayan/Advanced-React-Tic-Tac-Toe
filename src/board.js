@@ -1,13 +1,15 @@
 import React from "react";
-import { useSyncLocalStorage } from "./hooks/utils";
 export default function Board({onClick,squares}) {
-  const initialSquares = Array(9).fill();
-  const [squares, setSquares] = useSyncLocalStorage("squares", initialSquares);
-  
+  function renderSquare(params) {
+    return (
+      <button className="square" onClick={() => onClick(params)}>
+        {squares[params]}
+      </button>
+    );
+  }
 
   return (
     <div>
-      <div className="status">{status}</div>
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
@@ -23,9 +25,7 @@ export default function Board({onClick,squares}) {
         {renderSquare(7)}
         {renderSquare(8)}
       </div>
-      <button className="restart" onClick={restart}>
-        restart
-      </button>
+      
     </div>
   );
   

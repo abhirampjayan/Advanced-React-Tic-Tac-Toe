@@ -37,10 +37,16 @@
         padding-left: 30px;
     }
     
+    .board {}
+    
     .board-row:after {
         clear: both;
         content: '';
         display: table;
+    }
+    
+    .board-row {
+        border: 0;
     }
     
     .status {
@@ -64,20 +70,26 @@
     }
     
     .board-row:first-child {
-        border-radius: 10px;
+        border-radius: 10px 10px 0px 0px;
+        overflow: hidden;
+    }
+    
+    .board-row:last-child {
+        border-radius: 0px 0px 10px 10px;
         overflow: hidden;
     }
     
     .square {
         background: #fff;
-        border: 1px solid #eaeaea;
+        border: 0px solid #eaeaea;
         float: left;
         font-size: 24px;
         font-weight: bold;
         line-height: 50px;
+        box-shadow: inset 0px 0px 2px #353535;
         height: 60px;
-        margin-right: -1px;
-        margin-top: -1px;
+        margin-right: 0px;
+        margin-top: 0px;
         padding: 0;
         text-align: center;
         width: 60px;
@@ -90,10 +102,46 @@
     
     .game {
         display: flex;
+        width: 500px;
         flex-direction: row;
     }
     
+    .steps {
+        padding: 3px 5px;
+        color: white;
+        opacity: .5;
+        margin: 2px;
+        border: 1.5px solid #eaeaea;
+        border-radius: 10px;
+        background: #7F00FF;
+        /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #E100FF, #7F00FF);
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #E100FF, #7F00FF);
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+    
+    .steps.current {
+        opacity: 1;
+    }
+    
     .game-info {
+        height: 200px;
         margin-left: 20px;
-        min-width: 190px;
+        overflow-y: auto;
+    }
+    
+    .game-info::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    .game-info::-webkit-scrollbar-track {
+        background-color: #e4e4e4;
+        border-radius: 100px;
+    }
+    
+    .game-info::-webkit-scrollbar-thumb {
+        border-radius: 100px;
+        background-image: linear-gradient(180deg, #d0368a 0%, #708ad4 99%);
+        box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
     }

@@ -3,39 +3,46 @@ import Board from "./board";
 import { useSyncLocalStorage } from "./hooks/utils";
 
 function App() {
-  const [history, sethistory] = useSyncLocalStorage(
+  const [history, setHistory] = useSyncLocalStorage(
     "tic-tac-toe-game:history",
     [Array(9).fill()]
   );
-  const [currentStep, setcurrentStep] = useSyncLocalStorage(
+  const [currentStep, setCurrentStep] = useSyncLocalStorage(
     "tic-tac-toe-game:step",
     0
   );
   const currentSquares = history[currentStep];
-  const nextValue = calculateNextValue(squares);
-  const winner = calculateWinner(squares);
-  const status = calculateStatus(winner, squares, nextValue);
+  const nextValue = calculateNextValue(currentSquares);
+  const winner = calculateWinner(currentSquares);
+  const status = calculateStatus(winner, currentSquares, nextValue);
 
   function restart() {
-    setSquares(initialSquares);
+    setHistory([Array(9).fill(null)]);
+    setCurrentStep(0);
   }
-  
+
   function selectSquare(square) {
     if (winner || currentSquares[square]) {
       return;
     }
-    const squaresCopy = [...squares];
-    squaresCopy[square] = nextValue;
-    setSquares(squaresCopy);
+    const newHistory = history.slice(0, currentStep + 1);
+    const squares = [...currentSquares];
+    squares[square] = nextValue;
+    setHistory([...newHistory, squares]);
+    setCurrentStep(newHistory.length);
   }
-  
-  function renderSquare(params) {
+  const moves = history.map((stepSquares, step) => {
+    const desc = step ? `Go to move #${step}` : "Go to game start";
+    const isCurrentStep = step === currentStep;
     return (
-      <button className="square" onClick={() => onClick(params)}>
-        {squares[params]}
-      </button>
+      <li key={step}>
+        <button className={isCurrentStep ? "steps current" : "steps"} disabled={isCurrentStep} onClick={() => setCurrentStep(step)}>
+          {desc} 
+        </button>
+      </li>
     );
-  }
+  });
+
   return (
     <>
       <div className="container">
@@ -45,8 +52,11 @@ function App() {
             <Board
               className="board"
               onClick={selectSquare}
-              squares={currentSquare}
+              squares={currentSquares}
             />
+            <button className="restart" onClick={restart}>
+              restart
+            </button>
           </div>
           <div className="game-info">
             <div>{status}</div>
